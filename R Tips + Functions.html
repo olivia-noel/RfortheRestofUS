@@ -125,11 +125,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(here)</span>
 <span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggthemes)</span>
 <span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="co"># library(ggchicklet)</span></span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(scales)</span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(skimr)</span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(gtsummary)</span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dataReporter)</span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(pointblank)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(nflplotR)</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(scales)</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(skimr)</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(gtsummary)</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dataReporter)</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(pointblank)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="r-functions" class="level1">
@@ -247,18 +248,24 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <td>Week 6 session</td>
 </tr>
 <tr class="odd">
+<td><code>drive_read_string_(file = "name.extension") |&gt;read_csv()</code></td>
+<td>googlesheets4</td>
+<td>identifies file in google drive and converts to csv object</td>
+<td>Week 6 session</td>
+</tr>
+<tr class="even">
 <td><code>download.file()</code></td>
 <td></td>
 <td>downloads files directly from websites</td>
 <td>Week 7: Downloading and Importing Data</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td><code>dir_create()</code></td>
 <td>fs</td>
 <td>creates a new folder in project folder</td>
 <td>Week 7: Downloading and Importing Data</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td></td>
 <td></td>
 <td></td>
@@ -589,7 +596,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </tr>
 <tr class="even">
 <td><code>ggpreview()</code></td>
-<td>tidyverse</td>
+<td>nflplotR</td>
 <td>set size of plot and preview</td>
 <td>Week 6 session, <a href="https://search.r-project.org/CRAN/refmans/nflplotR/html/ggpreview.html">guide</a></td>
 </tr>
@@ -628,6 +635,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li>when selecting a file, enter folder name and hit TAB, which will pull up a list of files you can select from</li>
 <li>to view the help file for a function, type in the console: ?functionname</li>
 </ul></li>
+<li>to create global variables (like for file paths), edit your .Renviron file - see Week 6 session ~38:00</li>
 <li>tidy data – more <a href="https://openscapes.org/blog/2020-10-12-tidy-data/">here</a>
 <ul>
 <li>every column is a variable</li>
