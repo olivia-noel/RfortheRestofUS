@@ -1,0 +1,905 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.433">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="dcterms.date" content="2023-11-10">
+
+<title>R Tips + Functions</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="R Tips + Functions_files/libs/clipboard/clipboard.min.js"></script>
+<script src="R Tips + Functions_files/libs/quarto-html/quarto.js"></script>
+<script src="R Tips + Functions_files/libs/quarto-html/popper.min.js"></script>
+<script src="R Tips + Functions_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="R Tips + Functions_files/libs/quarto-html/anchor.min.js"></script>
+<link href="R Tips + Functions_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="R Tips + Functions_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="R Tips + Functions_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="R Tips + Functions_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="R Tips + Functions_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+
+
+</head>
+
+<body>
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+<div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+  <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#packages" id="toc-packages" class="nav-link active" data-scroll-target="#packages">Packages</a></li>
+  <li><a href="#r-functions" id="toc-r-functions" class="nav-link" data-scroll-target="#r-functions">R Functions</a>
+  <ul class="collapse">
+  <li><a href="#general" id="toc-general" class="nav-link" data-scroll-target="#general">General</a></li>
+  <li><a href="#data-manipulation-summarization" id="toc-data-manipulation-summarization" class="nav-link" data-scroll-target="#data-manipulation-summarization">Data Manipulation &amp; Summarization</a></li>
+  <li><a href="#visualizations" id="toc-visualizations" class="nav-link" data-scroll-target="#visualizations">Visualizations</a></li>
+  </ul></li>
+  <li><a href="#tips" id="toc-tips" class="nav-link" data-scroll-target="#tips">Tips</a></li>
+  </ul>
+</nav>
+</div>
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">R Tips + Functions</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">November 10, 2023</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+</header>
+
+<section id="packages" class="level1">
+<h1>Packages</h1>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(googledrive)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(janitor)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(here)</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggthemes)</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="co"># library(ggchicklet)</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(scales)</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(skimr)</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(gtsummary)</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dataReporter)</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(pointblank)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="r-functions" class="level1">
+<h1>R Functions</h1>
+<section id="general" class="level2">
+<h2 class="anchored" data-anchor-id="general">General</h2>
+<table class="table">
+<thead>
+<tr class="header">
+<th>Function</th>
+<th>Package</th>
+<th>Purpose / Use</th>
+<th>Lesson / Additional Resources</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>setwd()</code></td>
+<td></td>
+<td>sets working directory</td>
+<td>Week 3: session</td>
+</tr>
+<tr class="even">
+<td><code>getwd()</code></td>
+<td></td>
+<td>displays working directory</td>
+<td>Week 4: session</td>
+</tr>
+<tr class="odd">
+<td><code>here()</code></td>
+<td>here</td>
+<td>returns root of project, which can be inserted into file path: <code>read_csv(here("file.csv")</code></td>
+<td>Week 4: session</td>
+</tr>
+<tr class="even">
+<td><code>read_csv(path = "")</code></td>
+<td>tidyverse</td>
+<td><p>imports csv</p>
+<ul>
+<li>additional arguments can:
+<ul>
+<li>specify values to treat as NA — <code>na = c("*", "-", "--", "Prefer not to answer")</code></li>
+<li>manually set variable types — <code>col_types = cols(varname = "type")</code> where c = character, n = number, D = date</li>
+</ul></li>
+</ul></td>
+<td><p>Week 1: Import Data</p>
+<p>Week 1: Import Our Data Again</p></td>
+</tr>
+<tr class="odd">
+<td><code>read_excel(path = "")</code></td>
+<td>readxl</td>
+<td><p>imports excel</p>
+<ul>
+<li>additional arguments can:
+<ul>
+<li>specify values to treat as NA — <code>na = c("*", "-", "--", "Prefer not to answer")</code></li>
+<li>specify sheet to import — <code>sheet = "sheetname"</code></li>
+</ul></li>
+</ul></td>
+<td>Week 7: Downloading and Importing Data</td>
+</tr>
+<tr class="even">
+<td><code>read_stata()</code></td>
+<td>haven/tidyverse</td>
+<td>imports stata .dta files</td>
+<td><p><a href="https://muse.ai/vt/7ZLmAfZ-SPSS-Labelled-Variables">Bonus video: Labelled Variables</a></p>
+<p><a href="https://haven.tidyverse.org/reference/read_dta.html">Documentation</a></p></td>
+</tr>
+<tr class="odd">
+<td><code>clean_names()</code></td>
+<td>janitor</td>
+<td>removes spaces and caps from var names; use with read_csv() or read_excel()</td>
+<td>Week 7: Downloading and Importing Data</td>
+</tr>
+<tr class="even">
+<td><code>glimpse(object name)</code></td>
+<td></td>
+<td>presents transposed data in console pane</td>
+<td>Week 1: Examine our Data</td>
+</tr>
+<tr class="odd">
+<td><code>view(object name)</code></td>
+<td></td>
+<td>opens data object in new tab</td>
+<td>Week 1: Examine our Data</td>
+</tr>
+<tr class="even">
+<td><code>skim(object name)</code></td>
+<td>skimr</td>
+<td>generates summary of data in console pane – # rows/columns, list of vars by type w/ summary stats</td>
+<td>Week 1: Examine our Data</td>
+</tr>
+<tr class="odd">
+<td><code>tbl_summary(object name)</code></td>
+<td>gtsummary</td>
+<td>generates summary of data in viewer pane w/ summary stats</td>
+<td></td>
+</tr>
+<tr class="even">
+<td><code>makeDataReport(object name)</code></td>
+<td>dataReporter</td>
+<td>generates PDF data summary w/ summary stats, var types, histograms</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td><code>scan_data(object name)</code></td>
+<td>pointblank</td>
+<td>generates overview of data in viewer pane, w/ details/summary stats that can be toggled on/off</td>
+<td></td>
+</tr>
+<tr class="even">
+<td><code>drive_auth()</code></td>
+<td>googlesheets4</td>
+<td>log in to google drive account</td>
+<td>Week 6 session</td>
+</tr>
+<tr class="odd">
+<td><code>download.file()</code></td>
+<td></td>
+<td>downloads files directly from websites</td>
+<td>Week 7: Downloading and Importing Data</td>
+</tr>
+<tr class="even">
+<td><code>dir_create()</code></td>
+<td>fs</td>
+<td>creates a new folder in project folder</td>
+<td>Week 7: Downloading and Importing Data</td>
+</tr>
+<tr class="odd">
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="data-manipulation-summarization" class="level2">
+<h2 class="anchored" data-anchor-id="data-manipulation-summarization">Data Manipulation &amp; Summarization</h2>
+<table class="table">
+<colgroup>
+<col style="width: 8%">
+<col style="width: 3%">
+<col style="width: 76%">
+<col style="width: 10%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Function</th>
+<th>Package</th>
+<th>Purpose / Use</th>
+<th>Lesson / Additional Resources</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>select(var)</code></td>
+<td>tidyverse</td>
+<td><p>selects specified variables from dataframe</p>
+<p>in argument, can use:</p>
+<ul>
+<li><p>single variable</p></li>
+<li><p>multiple vars, separated by comma</p></li>
+<li><p>contains(““)</p></li>
+<li><p>starts_with(““)</p></li>
+<li><p>ends_with(““)</p></li>
+<li><p>var:var (selects range of vars)</p></li>
+<li><p>-var (drops var)</p></li>
+</ul></td>
+<td>Week 2: select()</td>
+</tr>
+<tr class="even">
+<td><code>filter()</code></td>
+<td>tidyverse</td>
+<td><p>selects subset of observations, using comparison operators (==, !=, &gt;, &gt;=, &lt;, &lt;=, is.na, !is.na, %in%) and logical operators (&amp;, |, !)</p>
+<ul>
+<li><p><code>filter(var == 10)</code></p></li>
+<li><p><code>filter(is.na(var))</code></p></li>
+</ul></td>
+<td>Week 2: filter()</td>
+</tr>
+<tr class="odd">
+<td><code>drop_na()</code></td>
+<td>tidyverse</td>
+<td>in addition to <code>filter(!is.na())</code>, <code>drop_na()</code> can be used to remove observations with NA values</td>
+<td>Week 2: filter()</td>
+</tr>
+<tr class="even">
+<td><code>mutate()</code></td>
+<td>tidyverse</td>
+<td><p>makes or changes existing vars:</p>
+<ul>
+<li><p>to make var w/ specific value: <code>mutate(var = "")</code></p></li>
+<li><p>to make a new var based on other vars: <code>mutate(var1 = var * 2)</code></p></li>
+<li><p>to change an existing var: <code>mutate(var = var + 1)</code></p>
+<ul>
+<li>to change var type: <code>mutate(var = as.numeric(var))</code> <code>mutate(var = as.character(var))</code></li>
+<li>to remove a string of text: <code>mutate(var = str_remove(var,pattern = "text to remove"))</code></li>
+<li>to recode specified values: <code>mutate(var = recode(var,"old value" = "new value"))</code></li>
+<li>to modify value based on a condition: <code>mutate(var = if_else(var == "some_value",true = "if_true_value",false = "else_value"))</code></li>
+<li>to modify value based on multiple conditions: <code>mutate(var = case_when(var == "some value" ~ "new value",var == "some B value" ~ "new B value",var == "some C value" ~ "new C value",.default = "value for all others that don't match above"))</code></li>
+<li>to remove non-numeric characters and convert var to numeric: <code>mutate(var = parse_number(var))</code></li>
+<li>to set value as NA based on condition: <code>mutate(var = na_if(var, "condition"))</code></li>
+<li>to change cell value from NA to specified value: <code>mutate(var = replace_na(var, "value to replace"))</code></li>
+<li>to wrap text (to be used with plot labels): <code>mutate(var_wrapped = str_wrap(var, width = Xwidth))</code></li>
+<li>to reorder a var for a plot: <code>mutate(var = fct_relevel(var, "cell value1", "cell value2", "cell value3"))</code> or <code>mutate(plottedvar = fct_relevel(plottedvar, var_to_order_by))</code></li>
+</ul></li>
+</ul></td>
+<td><p>Week 2: mutate()</p>
+<p>Week 7: Changing Variable Types</p>
+<p>Week 7: Tidy Data Rule #3</p>
+<p>Week 7: Dealing with Missing Data</p>
+<p>Week 3: session</p></td>
+</tr>
+<tr class="odd">
+<td><code>group_by()</code></td>
+<td>tidyverse</td>
+<td><p>groups data by a specified variable, often used with <code>summarize()</code></p>
+<p><code>group_by(varX) |&gt;summarize(mean_varY = mean(varY, na.rm = TRUE))</code></p></td>
+<td>Week 2: group_by()</td>
+</tr>
+<tr class="even">
+<td><code>summarize()</code></td>
+<td>tidyverse</td>
+<td><p>summarizes a variable based on specified argument, for example: <code>summarize(mean_var = mean(var))</code></p>
+<p>must remove NA values using <code>drop_na(var)</code> or in argument: <code>summarize(mean_var = mean(var, na.rm = TRUE))</code></p>
+<p>can have multiple summaries in one function: <code>summarize(mean_var = mean(var, na.rm = TRUE),max_var = max(var, na.rm = TRUE))</code></p>
+<p>can be used with <code>group_by()</code> or can add argument within summarize: <code>summarize(mean_var = mean(var, na.rm = TRUE),.by = c(var1, var2))</code></p></td>
+<td>Week 2: summarize()</td>
+</tr>
+<tr class="odd">
+<td><code>count()</code></td>
+<td>tidyverse</td>
+<td>counts observations based on specified variable</td>
+<td>Week 2: group_by()</td>
+</tr>
+<tr class="even">
+<td><code>tably(var, var)</code></td>
+<td>janitor</td>
+<td>produces crosstab</td>
+<td>Week 2: session</td>
+</tr>
+<tr class="odd">
+<td><code>arrange()</code></td>
+<td>tidyverse</td>
+<td><p>sorts dataset based on specified variables, in ascending order by default</p>
+<p>to sort in descending order, use <code>arrnge(desc(var))</code></p></td>
+<td>Week 2: arrange()</td>
+</tr>
+<tr class="even">
+<td><code>pivot_longer()</code></td>
+<td>tidyverse</td>
+<td><p>reshapes long</p>
+<p><code>pivot_longer(cols = cols_to_use,names_to = "name_of_identifier_var",values_to = "name_of_value_var")</code></p></td>
+<td>Week 7: Tidy Data Rule #1</td>
+</tr>
+<tr class="odd">
+<td><code>separate_longer_delim()</code></td>
+<td></td>
+<td><p>reshapes data based on multiselect variable, such that one row = one response option</p>
+<p><code>separate_longer_delim(variable,delim = ", ")</code></p></td>
+<td></td>
+</tr>
+<tr class="even">
+<td><code>slice_max()</code></td>
+<td></td>
+<td></td>
+<td>Week 9: lesson</td>
+</tr>
+<tr class="odd">
+<td><code>pull()</code></td>
+<td></td>
+<td></td>
+<td>Week 9: lesson</td>
+</tr>
+<tr class="even">
+<td><code>str_glue("{var} text")</code></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="visualizations" class="level2">
+<h2 class="anchored" data-anchor-id="visualizations">Visualizations</h2>
+<table class="table">
+<thead>
+<tr class="header">
+<th>Function</th>
+<th>Package</th>
+<th>Purpose</th>
+<th>Lesson / Additional Resources</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>ggplot() +</code></td>
+<td>tidyverse</td>
+<td><p>select splot data and sets aesthetic properties (x, y, color, fill, etc) using the following arguments:</p>
+<ul>
+<li><code>data = data_name,</code></li>
+<li><code>mapping = aes(x = var, y = var)) +</code></li>
+<li><code>color = var</code> – changes outline color</li>
+<li><code>fill = var</code></li>
+<li><code>label = var</code> - must be used with <code>geom_text()</code></li>
+</ul></td>
+<td>Week 3</td>
+</tr>
+<tr class="even">
+<td><code>geom_point()</code></td>
+<td>tidyverse</td>
+<td>produces scatterplot</td>
+<td>Week 3: Scatterplots</td>
+</tr>
+<tr class="odd">
+<td><code>geom_histogram()</code></td>
+<td>tidyverse</td>
+<td><p>produces histogram, using stat = “bin” as default statistical calculation</p>
+<p>can add argument <code>bins = 10</code> to manually set # of bins - default is 30 bins</p></td>
+<td>Week 3: Histograms</td>
+</tr>
+<tr class="even">
+<td><code>geom_bar()</code></td>
+<td>tidyverse</td>
+<td><p>produces bar chart, where the default statistical transformation is count</p>
+<p>if data has already been summarized, add argument <code>stat = "identity"</code></p></td>
+<td>Week 3: Bar Charts</td>
+</tr>
+<tr class="odd">
+<td><code>geom_col()</code></td>
+<td>tidyverse</td>
+<td><p>produces bar chart, where data has already been summarized</p>
+<p>if data is grouped, default is stacked bars; use argument <code>position = "dodge"</code> to set bars side by side</p>
+<p>additional arguments:</p>
+<ul>
+<li><code>show.legend = FALSE</code> to remove legend</li>
+<li><code>width = 0.9</code> - sets bar width at 90% of space</li>
+</ul></td>
+<td><p>Week 3: Setting color and fill scales</p>
+<p>Week 3: Plot labels</p></td>
+</tr>
+<tr class="even">
+<td><code>geom_chicklet()</code></td>
+<td>ggchicklet</td>
+<td></td>
+<td>Week 9: session</td>
+</tr>
+<tr class="odd">
+<td><code>geom_line()</code></td>
+<td>tidyverse</td>
+<td><p>produces line chart</p>
+<p>needs to be used to with argument <code>group = var</code> to organize data for lines</p></td>
+<td>Week 3: session</td>
+</tr>
+<tr class="even">
+<td><code>coord_flip()</code></td>
+<td>tidyverse</td>
+<td>flips x and y vars</td>
+<td>Week 3: Bar Charts</td>
+</tr>
+<tr class="odd">
+<td><code>scale_color_manual()</code></td>
+<td>tidyverse</td>
+<td><p>manually specifies colors to use in plot</p>
+<p><code>scale_color_manual(values = c(HEX, HEX, HEX))</code></p></td>
+<td>Week 3: Setting color and fill scales</td>
+</tr>
+<tr class="even">
+<td><code>scale_color_...()</code></td>
+<td>tidyverse</td>
+<td><p>uses built-in color palettes</p>
+<p>can use argument <code>option = ""</code> to select specific palette</p>
+<p>use <code>_c</code> or <code>_d</code> in function name to specify whether data is discrete or continuous</p></td>
+<td>Week 3: Bar Charts</td>
+</tr>
+<tr class="odd">
+<td><code>scale_y_...()</code></td>
+<td>tidyverse</td>
+<td><p>used with a number of arguments to format axes</p>
+<ul>
+<li><code>limits = c(x, x)</code> - sets min and max values for axis</li>
+<li><code>breaks = c(0, 5, 10, 15)</code> - for continuous data, labels axis</li>
+<li><code>labels = c("", "", "")</code> - for discrete data, labels axis</li>
+</ul>
+<p>use <code>_continuous</code> or <code>_discrete</code> in function name to match var type</p></td>
+<td>Week 3: Setting x and y scales</td>
+</tr>
+<tr class="even">
+<td><code>scale_x_...()</code></td>
+<td>tidyverse</td>
+<td><p>used with a number of arguments to format axes</p>
+<ul>
+<li><code>limits = c(x, x)</code> - sets min and max values for axis</li>
+<li><code>breaks = c(0, 5, 10, 15)</code> - for continuous data, labels axis</li>
+<li><code>labels = c("", "", "")</code> - for discrete data, labels axis</li>
+</ul>
+<p>use <code>_continuous</code> or <code>_discrete</code> in function name to match var type</p></td>
+<td>Week 3: Setting x and y scales</td>
+</tr>
+<tr class="odd">
+<td><code>geom_text()</code></td>
+<td>tidyverse</td>
+<td><p>adds data labels, where label var has been set as argument in <code>ggplot()</code></p>
+<p>possible arguments:</p>
+<ul>
+<li><code>vjust = 0</code> - puts label on outer edge of vertical bars</li>
+<li><code>vjust = 1</code> - puts label on inner edge of vertical bars</li>
+<li><code>hjust</code> - used for horizontal justification</li>
+<li><code>position=position_stack(vjust=0.5))</code> - places label in center of bar</li>
+<li><code>color = HEX</code> - changes text color</li>
+<li><code>fill = HEX</code> - changes background color</li>
+<li><code>size</code> - sets label size in mm; can use <code>size = X / .pt)</code> to set size relative to points</li>
+<li><code>fontface</code> - font settings, like “bold”</li>
+</ul></td>
+<td>Week 3: Adding text to plots</td>
+</tr>
+<tr class="even">
+<td><code>labs()</code></td>
+<td>tidyverse</td>
+<td><p>adds labels to plot, using the following arguments:</p>
+<ul>
+<li><code>title = "",</code></li>
+<li><code>subtitle = "",</code></li>
+<li><code>caption = "",</code></li>
+<li><code>x = "",</code></li>
+<li><code>y = "",</code></li>
+<li><code>fill = "",</code> - changes legend title</li>
+</ul>
+<p>use “NULL” to remove label</p></td>
+<td>Week 3: Plot labels</td>
+</tr>
+<tr class="odd">
+<td><code>theme_...()</code></td>
+<td>tidyverse, <a href="https://yutannihilation.github.io/allYourFigureAreBelongToUs/ggthemes/">ggthemes</a></td>
+<td><p>this set of functions changes the overall theme of a plot</p>
+<p>use <code>theme_void()</code> to remove themes</p>
+<p>possible arguments:</p>
+<ul>
+<li><code>base_size = X</code> sets text size across plot</li>
+</ul></td>
+<td>Week 3: Themes</td>
+</tr>
+<tr class="even">
+<td><code>facet_wrap(vars()</code></td>
+<td>tidyverse</td>
+<td><p>creates small multiples based on a specified variable</p>
+<p><code>facet_wrap(vars(sex))</code></p></td>
+<td>Week 3: Facets</td>
+</tr>
+<tr class="odd">
+<td><code>facet_grid()</code></td>
+<td>tidyverse</td>
+<td><p>creates small multiples, which can be arranged in columns or rows</p>
+<p><code>facet_grid(rows = vars(year), cols = vars(sex))</code></p></td>
+<td>Week 3: Facets</td>
+</tr>
+<tr class="even">
+<td><code>ggpreview()</code></td>
+<td>tidyverse</td>
+<td>set size of plot and preview</td>
+<td>Week 6 session, <a href="https://search.r-project.org/CRAN/refmans/nflplotR/html/ggpreview.html">guide</a></td>
+</tr>
+<tr class="odd">
+<td><code>ggsave()</code></td>
+<td>tidyverse</td>
+<td><p>saves last plot made, using a number of arguments:</p>
+<ul>
+<li><code>filename = ""</code></li>
+<li><code>height = X</code> / <code>width = X</code> / <code>units = "in"</code></li>
+<li><code>bg = HEX</code> - sets background color, default is transparent</li>
+<li><code>dpi =</code> - dot per square inch</li>
+</ul>
+<p>pdf is vector based and doesn’t need dpi - will look good</p></td>
+<td>Week 3: Save plots</td>
+</tr>
+<tr class="even">
+<td></td>
+<td>tidyverse</td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
+<section id="tips" class="level1">
+<h1>Tips</h1>
+<ul>
+<li>project workflow
+<ul>
+<li>in github, each repo is a project?</li>
+</ul></li>
+<li>general
+<ul>
+<li>when selecting a file, enter folder name and hit TAB, which will pull up a list of files you can select from</li>
+<li>to view the help file for a function, type in the console: ?functionname</li>
+</ul></li>
+<li>tidy data – more <a href="https://openscapes.org/blog/2020-10-12-tidy-data/">here</a>
+<ul>
+<li>every column is a variable</li>
+<li>every row is an observation</li>
+<li>every cell is a single value</li>
+</ul></li>
+<li>keyboard shortcuts
+<ul>
+<li>CMD + shift + M = pipe operator</li>
+<li>CMD + shift + C = insert comment#</li>
+<li>CTRL + L = clears console</li>
+</ul></li>
+<li><a href="https://github.com/rfortherestofus/rin3-fall-2023/blob/main/misc/beginner-cheatsheets.pdf">cheatsheets</a></li>
+<li>quarto
+<ul>
+<li>resources
+<ul>
+<li><a href="https://quarto.org/docs/authoring/markdown-basics.html">markdown basics</a></li>
+<li><a href="https://quarto.org/docs/reference/cells/cells-knitr.html">code block cell options</a></li>
+<li><a href="https://quarto.org/docs/output-formats/html-basics.html#css-styles">custom CSS for HTML</a></li>
+<li><a href="https://quarto-workshop.netlify.app/">creating a website using quarto</a></li>
+</ul></li>
+<li>tips
+<ul>
+<li>to run an R script at the top of quarto doc (and use cleaned data and plots), include a code chunk with <code>source("filename.R")</code></li>
+<li>creating custom look and feel — depends on output type
+<ul>
+<li>for using HTML divs to create columns and manage page layout, see 49:00 of <a href="https://rfortherestofus.com/courses/r-in-3-months-fall-2023/lessons/live-session">Lesson 4: session</a></li>
+</ul></li>
+</ul></li>
+</ul></li>
+<li><a href="https://shiny.posit.co/r/gallery/#feature-demos">shiny documentation</a></li>
+</ul>
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>
